@@ -21,7 +21,6 @@ from tf2_ros import StaticTransformBroadcaster
 import tf_transformations
 import math
 import numpy as np
-from bresenham import bresenham
 
 GLOBAL_SIZE_X = 20.0
 GLOBAL_SIZE_Y = 20.0
@@ -63,6 +62,36 @@ class SimpleMapperMultiranger(Node):
         self.get_logger().info(f"Simple mapper set for crazyflie " + robot_prefix +
                                f" using the odom and scan topic")
 
+    def bresenham_line(self, x0, y0, x1, y1):
+        """
+        Bresenham's line algorithm implementation
+        Returns a list of (x, y) coordinates from (x0, y0) to (x1, y1)
+        """
+        points = []
+        dx = abs(x1 - x0)
+        dy = abs(y1 - y0)
+        sx = 1 if x0 < x1 else -1
+        sy = 1 if y0 < y1 else -1
+        err = dx - dy
+        
+        x, y = x0, y0
+        
+        while True:
+            points.append((x, y))
+            
+            if x == x1 and y == y1:
+                break
+                
+            e2 = 2 * err
+            if e2 > -dy:
+                err -= dy
+                x += sx
+            if e2 < dx:
+                err += dx
+                y += sy
+                
+        return points
+
     def odom_subscribe_callback(self, msg):
         self.position[0] = msg.pose.pose.position.x
         self.position[1] = msg.pose.pose.position.y
@@ -94,7 +123,7 @@ class SimpleMapperMultiranger(Node):
                 (self.position[0] - GLOBAL_SIZE_X / 2.0) / MAP_RES)
             position_y_map = int(
                 (self.position[1] - GLOBAL_SIZE_Y / 2.0) / MAP_RES)
-            for line_x, line_y in bresenham(position_x_map, position_y_map, point_x, point_y):
+            for line_x, line_y in self.bresenham_line(position_x_map, position_y_map, point_x, point_y):
                 self.map[line_y * int(GLOBAL_SIZE_X / MAP_RES) + line_x] = 0
             self.map[point_y * int(GLOBAL_SIZE_X / MAP_RES) + point_x] = 100
 
