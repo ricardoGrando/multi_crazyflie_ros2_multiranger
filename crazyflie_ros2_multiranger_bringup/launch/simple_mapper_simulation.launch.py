@@ -31,7 +31,7 @@ def generate_launch_description():
         name='simple_mapper',
         output='screen',
         parameters=[
-            {'robot_prefix': 'crazyflie'},
+            {'robot_prefix': 'cf1'},
             {'use_sim_time': True}
         ]
     )
