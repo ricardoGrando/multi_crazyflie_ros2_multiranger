@@ -47,7 +47,7 @@ def _setup(context, *args, **kwargs):
         uav = f'cf{sid}'
         file_path = os.path.join(models_dir, f'crazyflie_cf{sid}', 'model.sdf')
         x = start_x + i * spacing
-        actions.append(_spawn_from_file(uav, file_path, x, 0.0, z))
+        actions.append(_spawn_from_file(uav, file_path, x, 0.2, z))
         actions.append(_bridge_cmd_vel(uav, f'/{uav}/gazebo/command/twist'))
         actions.append(_bridge_odom(uav, f'/model/{uav}/odometry'))
     return actions
