@@ -46,16 +46,16 @@ def generate_launch_description():
         ]
     )
 
-    rviz = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='screen',
-        arguments=['-d', rviz_config],
-        parameters=[{
-            'use_sim_time': use_sim_time
-        }]
-    )
+    #rviz = Node(
+    #    package='rviz2',
+    #    executable='rviz2',
+    #    name='rviz2',
+    #    output='screen',
+    #    arguments=['-d', rviz_config],
+    #    parameters=[{
+    #        'use_sim_time': use_sim_time
+    #    }]
+    #)
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -81,5 +81,5 @@ def generate_launch_description():
 
         crazyflie_simulation,
         simple_mapper,
-        rviz,
+        #rviz,
     ])
